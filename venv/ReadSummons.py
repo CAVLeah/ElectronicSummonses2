@@ -9,7 +9,7 @@ print(doc.metadata)
 pgnumber = 0
 page1 = doc.loadPage(pgnumber)
 page1text = page1.getText("text")
-print(page1text)
+print(str(page1text))
 
 
 
