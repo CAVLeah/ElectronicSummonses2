@@ -16,5 +16,12 @@ def remove_incorrect_result(result):
 remove_incorrect_result("MASTER, PAGE")
 remove_incorrect_result("LAST, FIRST")
 remove_incorrect_result("B, N")
-print(defendant)
 
+def only_return_defendant():
+    if len(defendant) > 1:
+        defendant.remove(defendant[~(len(defendant)-1)])
+
+only_return_defendant()
+
+print(defendant)
+print(len(defendant))

@@ -1,15 +1,10 @@
-import sys
-import os
+mport os
 import fitz
 import PyPDF2
 import re
 
-pg = 0         #Super simplistic version of what I want to do with the summonses
-while pg < 4:
-    print(pg)
-    pg += 2
 
-pdf_document = input("Enter complete path of docket you wish to split")  #The document we're breaking apart.
+pdf_document = "/Users/Leah/Documents/Cavalier CPS/EST/TestSummonses.pdf"  #The document we're breaking apart.
 doc = fitz.open(pdf_document)  #Opening the document.
 page_count = doc.pageCount  #Total number of pages.
 pgs_to_split = []
@@ -52,7 +47,6 @@ def create_list_of_pgs_to_split():
                 pgs_to_split.append(pgnumber + 3)
                 pgnumber += 4
             print(pgs_to_split)
-    pgs_to_split.append(page_count)
 
 
 def split_summonses(splitpages):
@@ -64,28 +58,20 @@ def split_summonses(splitpages):
         first_summons.insertPDF(doc, from_page=splitstart, to_page=splitpages[splitend])  #Determines the range to split the new PDF
         searchpage = doc.loadPage(splitstart)  # Load the page you want to search
         pagetext = searchpage.getText("text")  # Extract the page you want to search
-        defendant_up = re.findall('[A-Z]+,\s[A-Z]+', pagetext)  # Search the page for all uppercase
-        defendant_low = re.findall('[A-Z][a-z]+,\s[A-Z][a-z]+', pagetext)  #Search the page for normal capitalization
+        defendant = re.findall('[A-Z]+,\s[A-Z]+', pagetext)  # Search the page
 
-        def remove_incorrect_result(result,list): #Remove results that aren't the defendant
-            for line in list:
+        def remove_incorrect_result(result): #Remove results that aren't the defendant
+            for line in defendant:
                 if line == result:
-                    list.remove(result)
+                    defendant.remove(result)
 
-        remove_incorrect_result("MASTER, PAGE",defendant_up)
-        remove_incorrect_result("B, N",defendant_up)
-        remove_incorrect_result("Express, Plaza",defendant_low)
+        remove_incorrect_result("MASTER, PAGE")
+        remove_incorrect_result("B, N")
+        remove_incorrect_result("Express, Plaza")
 
-        only_return_defendant(defendant_up) #call the function that eliminates other results
-        only_return_defendant(defendant_low)
-        print(defendant_up)
-
-        if (defendant_low[0]) != 'Blvd, Rm':
-            first_summons.save('/Users/Leah/Google Drive (leah@cavaliercps.com)/CCPS Company Files/Faneuil/Norfolk Defendants/' + defendant_low[0] +'.pdf')
-        elif len(defendant_up) == 2:
-            first_summons.save('/Users/Leah/Google Drive (leah@cavaliercps.com)/CCPS Company Files/Faneuil/Norfolk Defendants/' + defendant_up[1] + '.pdf')
-        else:
-            first_summons.save('/Users/Leah/Google Drive (leah@cavaliercps.com)/CCPS Company Files/Faneuil/Norfolk Defendants/' + defendant_up[0] + '.pdf')
+        only_return_defendant(defendant) #call the function that eliminates other results
+        print(defendant)
+        first_summons.save('/Users/Leah/Documents/Cavalier CPS/EST/' + defendant[1] +'.pdf')
         splitstart = splitpages[splitend] + 1
         splitend += 1
         print(first_summons.pageCount)
