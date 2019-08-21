@@ -68,7 +68,7 @@ def split_summonses(splitpages):
         first_summons.insertPDF(doc, from_page=splitstart, to_page=splitpages[splitend])  #Determines the range to split the new PDF
         searchpage = doc.loadPage(splitstart)  # Load the page you want to search
         pagetext = searchpage.getText("text")  # Extract the page you want to search
-        defendant_up = re.findall('[A-Z]+,\s[A-Z]+', pagetext)  # Search the page for all uppercase
+        defendant_up = re.findall('[A-Z]+\s[A-Z]+,\s[A-Z]+', pagetext)  # Search the page for all uppercase
         defendant_low = re.findall('[A-Z][a-z]+,\s[A-Z][a-z]+', pagetext)  #Search the page for normal capitalization
 
         def remove_incorrect_result(result,list): #Remove results that aren't the defendant
@@ -83,10 +83,9 @@ def split_summonses(splitpages):
         only_return_defendant(defendant_up) #call the function that eliminates other results
         only_return_defendant(defendant_low)
         print(defendant_up)
+        first_summons.insertPDF(payment_sheet)
 
-        if (defendant_low[0]) != 'Blvd, Rm':
-            first_summons.save(save_path + defendant_low[0] + '-' + road + docket_date + '.pdf')
-        elif len(defendant_up) == 2:
+        if len(defendant_up) == 2:
             first_summons.save(save_path + defendant_up[1] + '-' + road + docket_date + '.pdf')
         else:
             first_summons.save(save_path + defendant_up[0] + '-' + road + docket_date + '.pdf')
@@ -95,7 +94,12 @@ def split_summonses(splitpages):
         print(first_summons.pageCount)
         print(pgs_to_split)
 
-
+def append_prepayment_sheet():
+    for filename in os.listdir(save_path):
+        filename.insertpdf(payment_sheet)
 
 print(split_summonses(pgs_to_split))
+append_prepayment_sheet()
+
+
 

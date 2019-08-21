@@ -84,18 +84,18 @@ def split_summonses(splitpages):
         only_return_defendant(defendant_low)
         print(defendant_up)
 
-        if (defendant_low[0]) != 'Blvd, Rm':
-            first_summons.save(save_path + defendant_low[0] + '-' + road + docket_date + '.pdf')
-        elif len(defendant_up) == 2:
-            first_summons.save(save_path + defendant_up[1] + '-' + road + docket_date + '.pdf')
+        if len(defendant_up) == 2:
+            first_summons.save(save_path + defendant_up[0] + '-' + road + docket_date + '.pdf')
         else:
             first_summons.save(save_path + defendant_up[0] + '-' + road + docket_date + '.pdf')
         splitstart = splitpages[splitend] + 1
         splitend += 1
         print(first_summons.pageCount)
         print(pgs_to_split)
+        print()
 
 
 
 print(split_summonses(pgs_to_split))
+
 
