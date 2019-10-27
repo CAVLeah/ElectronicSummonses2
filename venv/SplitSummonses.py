@@ -4,10 +4,6 @@ import fitz
 import PyPDF2
 import re
 
-pg = 0         #Super simplistic version of what I want to do with the summonses
-while pg < 4:
-    print(pg)
-    pg += 2
 
 pdf_document = input("Enter complete path of docket you wish to split: ")  #The document we're breaking apart.
 road = input("Enter the correct road (DTR, 66, or 64): ")
@@ -63,7 +59,8 @@ def split_summonses(splitpages):
     splitstart = 0  #where the page split begins
     splitend = 0  #where the page split ends
     create_list_of_pgs_to_split()
-    while splitend <= len(pgs_to_split):
+    print(len(pgs_to_split))
+    while splitend <= len(pgs_to_split)-1:
         first_summons = fitz.open()  #Create new PDF
         first_summons.insertPDF(doc, from_page=splitstart, to_page=splitpages[splitend])  #Determines the range to split the new PDF
         searchpage = doc.loadPage(splitstart)  # Load the page you want to search
@@ -84,6 +81,9 @@ def split_summonses(splitpages):
         only_return_defendant(defendant_low)
         print(defendant_up)
 
+        append_doc = fitz.open(payment_sheet)
+        first_summons.insertPDF(append_doc)
+
         if (defendant_low[0]) != 'Blvd, Rm':
             first_summons.save(save_path + defendant_low[0] + '-' + road + docket_date + '.pdf')
         elif len(defendant_up) == 2:
@@ -96,6 +96,6 @@ def split_summonses(splitpages):
         print(pgs_to_split)
 
 
-
 print(split_summonses(pgs_to_split))
+
 

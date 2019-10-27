@@ -8,7 +8,7 @@ while pg < 4:
     print(pg)
     pg += 2
 
-pdf_document = "/Users/Leah/Documents/Cavalier CPS/EST/TestSummonses.pdf"  #The document we're breaking apart.
+pdf_document = "/Users/Leah/Google Drive (leah@cavaliercps.com)/VDOT/Norfolk 64/092319 - 64/09-23-199-23 i64.pdf"  #The document we're breaking apart.
 doc = fitz.open(pdf_document)  #Opening the document.
 page_count = doc.pageCount  #Total number of pages.
 pgs_to_split = []
@@ -33,6 +33,19 @@ def create_list_of_pgs_to_split():
             print(pgs_to_split)
     pgs_to_split.append(page_count)
 
-create_list_of_pgs_to_split()
-print(page_count)
-print(pgs_to_split)
+def search_summonses():
+    pgnumber = 0
+    while pgnumber < (page_count - 4):
+        page1 = doc.loadPage(pgnumber)  # Page number
+        searchpage = doc.loadPage(pgnumber)  # Load the page you want to search
+        pagetext = searchpage.getText("text")  # Extract the page you want to search
+        defendant = re.findall('[A-Z]+,\s[A-Z]+', pagetext)  # Search the page
+        defendantsuffix = re.findall('[A-Z]+\s[A-Z]+,\s[A-Z]+', pagetext)
+        pgnumber += 4
+        if defendantsuffix[0] = True
+            badresult = re.findall(',\sVA',defendantsuffix[0])
+            if badresult[0] = True
+                defendantsuffix.remove(defendantsuffix[0])
+        print(defendantsuffix)
+
+search_summonses()
